@@ -332,9 +332,31 @@ canvas { display: block; }
   background: var(--accent);
   color: var(--bg);
 }
+
+/* ─── SKIP LINK ─── */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  z-index: 9999;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
 </style>
 </head>
 <body>
+
+<!-- SKIP LINK -->
+<a href="#timeline-view" class="skip-link">Passer au contenu</a>
 
 <!-- LOADING -->
 <div id="loading">
@@ -344,24 +366,24 @@ canvas { display: block; }
 </div>
 
 <!-- HEADER -->
-<div id="header">
+<nav id="header" aria-label="Navigation principale">
   <h1>AKH 313 <span>· ÉCOLE DE PENSÉE</span></h1>
   <div class="view-toggle">
-    <button id="btn-3d" class="active">Disque 3D</button>
-    <button id="btn-timeline">Timeline</button>
+    <button id="btn-3d" class="active" aria-label="Vue 3D">Disque 3D</button>
+    <button id="btn-timeline" aria-label="Vue chronologique">Timeline</button>
   </div>
-</div>
+</nav>
 
 <!-- INFO PANEL -->
-<div id="info-panel">
-  <button class="close-btn" onclick="closePanel()">✕</button>
+<aside id="info-panel" aria-live="polite">
+  <button class="close-btn" onclick="closePanel()" aria-label="Fermer le panneau">✕</button>
   <h2 id="panel-name"></h2>
   <div class="dates" id="panel-dates"></div>
   <div class="type-badge" id="panel-type"></div>
   <div class="desc" id="panel-desc"></div>
   <div id="panel-books"></div>
   <div class="connections-section" id="panel-connections"></div>
-</div>
+</aside>
 
 <!-- LEGEND -->
 <div id="legend" style="display:none;"></div>
@@ -369,7 +391,7 @@ canvas { display: block; }
 <!-- TIME CONTROLS -->
 <div id="time-controls">
   <div class="time-display" id="time-display">Toutes les époques</div>
-  <input type="range" id="time-slider" min="-10000" max="2026" value="2026" step="50">
+  <input type="range" id="time-slider" min="-10000" max="2026" value="2026" step="50" aria-label="Curseur temporel — filtrer par époque">
   <div class="time-labels">
     <span>10 000 AEC</span>
     <span>5 000 AEC</span>
@@ -379,8 +401,10 @@ canvas { display: block; }
   </div>
 </div>
 
-<!-- TIMELINE VIEW -->
+<!-- 3D CANVAS + TIMELINE -->
+<main id="canvas-container" role="application" aria-label="Carte cosmique 3D des traditions sacrées">
 <div id="timeline-view"></div>
+</main>
 
 <!-- FALLBACK -->
 <div id="fallback">
@@ -495,7 +519,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setClearColor(0x0a0a12);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.1;
-document.body.appendChild(renderer.domElement);
+document.getElementById('canvas-container').appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
