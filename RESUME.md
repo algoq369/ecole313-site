@@ -6,8 +6,8 @@
 - Root: ecole313-site/
 - Start: `python3 -m http.server 4000`
 - Build: CLEAN (static, zero deps, zero build step)
-- GitHub: ❌ NOT PUSHED
-- Webna gate: BLOCKED at Gate 1 (Foundation)
+- GitHub: ✅ github.com/algoq369/ecole313-site (public)
+- Webna gate: Gate 1 candidate (S1.1–S1.5 ✅)
 
 ## FILES (DO NOT RE-VERIFY)
 index.html (904L) — Three.js 3D viz + CSS + JS in single file
@@ -33,7 +33,7 @@ Webna Phases 2-3 | Goal: clean repo, error-free, Git committed
 - S1.2 ✅ WebGL detection: show fallback message if no WebGL
 - S1.3 ✅ try/catch around Three.js init (CDN fail → graceful error)
 - S1.4 ✅ Fix --text-dim #8a8678 → #9e9a8e (WCAG AA 4.5:1)
-- S1.5 🔲 Push to GitHub (public repo: ecole313-site)
+- S1.5 ✅ Push to GitHub (public repo: ecole313-site → github.com/algoq369/ecole313-site)
 ► GATE 1 CHECK: builds? renders? git committed? → PASS
 
 ### SPRINT 2: Accessibility + Responsive (→ Gate 2)
