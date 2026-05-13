@@ -10,7 +10,7 @@
 - Webna gate: BLOCKED at Gate 1 (Foundation)
 
 ## FILES (DO NOT RE-VERIFY)
-index.html (793L) — Three.js 3D viz + CSS + JS in single file
+index.html (904L) — Three.js 3D viz + CSS + JS in single file
 js/data.js (586L) — 50+ civs, 37 connections, 8 types, 7 regions
 README.md (62L) — project docs
 RESUME.md — this file
@@ -29,10 +29,10 @@ D1-D8 ✅ AKH 313 synthesis, 48-book curriculum, Paris itinerary, Efesia letter,
 
 ### SPRINT 1: Foundation (→ Gate 1)
 Webna Phases 2-3 | Goal: clean repo, error-free, Git committed
-- S1.1 🔲 Git init, .gitignore, initial commit
-- S1.2 🔲 WebGL detection: show fallback message if no WebGL
-- S1.3 🔲 try/catch around Three.js init (CDN fail → graceful error)
-- S1.4 🔲 Fix --text-dim #8a8678 → #9e9a8e (WCAG AA 4.5:1)
+- S1.1 ✅ Git init, .gitignore, initial commit
+- S1.2 ✅ WebGL detection: show fallback message if no WebGL
+- S1.3 ✅ try/catch around Three.js init (CDN fail → graceful error)
+- S1.4 ✅ Fix --text-dim #8a8678 → #9e9a8e (WCAG AA 4.5:1)
 - S1.5 🔲 Push to GitHub (public repo: ecole313-site)
 ► GATE 1 CHECK: builds? renders? git committed? → PASS
 

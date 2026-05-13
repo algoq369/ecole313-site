@@ -13,7 +13,7 @@
   --bg: #0a0a12;
   --bg-panel: rgba(12,12,22,0.92);
   --text: #e8e4dc;
-  --text-dim: #8a8678;
+  --text-dim: #9e9a8e;
   --accent: #d4a574;
   --accent2: #4ecdc4;
   --gold: #fbbf24;
@@ -286,6 +286,52 @@ canvas { display: block; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ─── FALLBACK ─── */
+#fallback {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 999;
+  background: var(--bg);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+#fallback.visible { display: flex; }
+#fallback h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem; font-weight: 300;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+}
+#fallback p {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.6;
+  max-width: 480px;
+  margin-bottom: 1.5rem;
+}
+#fallback .fallback-link {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.6rem 1.5rem;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+#fallback .fallback-link:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
 </style>
 </head>
 <body>
@@ -336,6 +382,13 @@ canvas { display: block; }
 <!-- TIMELINE VIEW -->
 <div id="timeline-view"></div>
 
+<!-- FALLBACK -->
+<div id="fallback">
+  <h2>AKH 313</h2>
+  <p id="fallback-msg"></p>
+  <a class="fallback-link" id="fallback-link">Voir la Timeline</a>
+</div>
+
 <!-- THREE.JS -->
 <script type="importmap">
 {
@@ -347,9 +400,85 @@ canvas { display: block; }
 </script>
 
 <script type="module">
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CIVILIZATIONS, CONNECTIONS, TYPES, REGIONS } from './js/data.js';
+
+// ============================================================
+// UTILITIES (available to both 3D and Timeline fallback)
+// ============================================================
+function formatYear(y) {
+  if (y < 0) return Math.abs(y) + ' AEC';
+  if (y === 2026) return 'Présent';
+  return y + ' EC';
+}
+
+function buildTimeline() {
+  const sorted = [...CIVILIZATIONS].sort((a, b) => a.startYear - b.startYear);
+  const el = document.getElementById('timeline-view');
+  let html = '<div class="tl-container"><div class="tl-line"></div>';
+  sorted.forEach(civ => {
+    const typeInfo = TYPES[civ.type];
+    const color = '#' + typeInfo.color.toString(16).padStart(6, '0');
+    html += `
+      <div class="tl-entry" onclick="window._selectCiv('${civ.id}'); document.getElementById('btn-3d').click();">
+        <div class="tl-date">${formatYear(civ.startYear)}</div>
+        <div class="tl-dot" style="background:${color}"></div>
+        <h3>${civ.name}</h3>
+        <p>${civ.description.substring(0, 150)}${civ.description.length > 150 ? '…' : ''}</p>
+      </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ============================================================
+// FALLBACK HANDLING
+// ============================================================
+function showFallback(message) {
+  document.getElementById('fallback-msg').textContent = message;
+  document.getElementById('fallback').classList.add('visible');
+  document.getElementById('loading').classList.add('hidden');
+  setTimeout(() => { const ld = document.getElementById('loading'); if (ld) ld.remove(); }, 600);
+}
+
+function activateTimeline() {
+  buildTimeline();
+  document.getElementById('btn-timeline').classList.add('active');
+  document.getElementById('btn-3d').classList.remove('active');
+  document.getElementById('btn-3d').disabled = true;
+  document.getElementById('btn-3d').style.opacity = '0.3';
+  document.getElementById('btn-3d').style.cursor = 'not-allowed';
+  document.getElementById('timeline-view').classList.add('active');
+  document.getElementById('time-controls').style.display = 'none';
+  document.getElementById('legend').style.display = 'none';
+  document.getElementById('fallback-link').addEventListener('click', () => {
+    document.getElementById('fallback').classList.remove('visible');
+  });
+}
+
+// ============================================================
+// WEBGL DETECTION
+// ============================================================
+function detectWebGL() {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+  } catch (e) {
+    return false;
+  }
+}
+
+window.closePanel = function() {};
+window._selectCiv = function() {};
+
+const hasWebGL = detectWebGL();
+
+if (!hasWebGL) {
+  activateTimeline();
+  showFallback('Votre navigateur ne supporte pas WebGL. Veuillez utiliser Chrome, Firefox ou Safari récent.');
+} else {
+try {
+const THREE = await import('three');
+const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
 
 // ============================================================
 // SCENE SETUP
@@ -657,12 +786,6 @@ window._selectCiv = function(id) {
   }
 };
 
-function formatYear(y) {
-  if (y < 0) return Math.abs(y) + ' AEC';
-  if (y === 2026) return 'Présent';
-  return y + ' EC';
-}
-
 // ============================================================
 // TIME SLIDER
 // ============================================================
@@ -722,24 +845,6 @@ btnTimeline.addEventListener('click', () => {
   document.getElementById('legend').style.display = 'none';
 });
 
-// Build timeline HTML
-function buildTimeline() {
-  const sorted = [...CIVILIZATIONS].sort((a, b) => a.startYear - b.startYear);
-  let html = '<div class="tl-container"><div class="tl-line"></div>';
-  sorted.forEach(civ => {
-    const typeInfo = TYPES[civ.type];
-    const color = '#' + typeInfo.color.toString(16).padStart(6, '0');
-    html += `
-      <div class="tl-entry" onclick="window._selectCiv('${civ.id}'); document.getElementById('btn-3d').click();">
-        <div class="tl-date">${formatYear(civ.startYear)}</div>
-        <div class="tl-dot" style="background:${color}"></div>
-        <h3>${civ.name}</h3>
-        <p>${civ.description.substring(0, 150)}${civ.description.length > 150 ? '…' : ''}</p>
-      </div>`;
-  });
-  html += '</div>';
-  timelineView.innerHTML = html;
-}
 buildTimeline();
 
 // ============================================================
@@ -788,6 +893,12 @@ setTimeout(() => {
 }, 1200);
 
 animate();
+
+} catch (e) {
+  activateTimeline();
+  showFallback('Erreur de chargement 3D. Basculez sur la vue Timeline.');
+}
+}
 </script>
 </body>
 </html>
