@@ -39,8 +39,8 @@ Webna Phases 2-3 | Goal: clean repo, error-free, Git committed
 ### SPRINT 2: Accessibility + Responsive (→ Gate 2)
 Webna Phase 5-6, Checks A/E/F/I | Goal: zero errors, accessible, responsive
 - S2.1 ✅ Accessibility: add role="application" to canvas, aria-labels on all interactive elements, aria-live region for info panel, skip-link to timeline view
-- S2.2 🔲 Keyboard nav: Tab through view toggle → time slider → timeline entries. Esc closes panel
-- S2.3 🔲 Focus states: :focus-visible with --accent outline on all buttons, slider, entries
+- S2.2 ✅ Keyboard nav: Tab through view toggle → time slider → timeline entries. Esc closes panel
+- S2.3 ✅ Focus states: :focus-visible with --accent outline on all buttons, slider, entries
 - S2.4 🔲 Responsive: info panel → bottom sheet on <480px (width:100%, max-height:50vh). Touch targets ≥44px
 - S2.5 🔲 Safari fix: add -webkit-backdrop-filter alongside backdrop-filter
 - S2.6 🔲 Test at 375/768/1024/1440px — no horizontal scroll

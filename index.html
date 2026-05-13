@@ -271,6 +271,28 @@ canvas { display: block; }
   line-height: 1.5;
 }
 
+/* ─── FOCUS STATES ─── */
+.view-toggle button:focus-visible,
+#time-slider:focus-visible,
+.tl-entry:focus-visible,
+#info-panel .conn-item:focus-visible,
+.skip-link:focus-visible,
+.close-btn:focus-visible,
+.fallback-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.view-toggle button:focus:not(:focus-visible),
+#time-slider:focus:not(:focus-visible),
+.tl-entry:focus:not(:focus-visible),
+#info-panel .conn-item:focus:not(:focus-visible),
+.skip-link:focus:not(:focus-visible),
+.close-btn:focus:not(:focus-visible),
+.fallback-link:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
   #info-panel { right: 0.5rem; left: 0.5rem; width: auto; top: 4rem; }
@@ -443,7 +465,7 @@ function buildTimeline() {
     const typeInfo = TYPES[civ.type];
     const color = '#' + typeInfo.color.toString(16).padStart(6, '0');
     html += `
-      <div class="tl-entry" onclick="window._selectCiv('${civ.id}'); document.getElementById('btn-3d').click();">
+      <div class="tl-entry" tabindex="0" onclick="window._selectCiv('${civ.id}'); document.getElementById('btn-3d').click();">
         <div class="tl-date">${formatYear(civ.startYear)}</div>
         <div class="tl-dot" style="background:${color}"></div>
         <h3>${civ.name}</h3>
@@ -493,6 +515,27 @@ function detectWebGL() {
 
 window.closePanel = function() {};
 window._selectCiv = function() {};
+
+// ============================================================
+// KEYBOARD NAVIGATION
+// ============================================================
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') window.closePanel();
+});
+
+document.getElementById('timeline-view').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    const entry = e.target.closest('.tl-entry');
+    if (entry) { e.preventDefault(); entry.click(); }
+  }
+});
+
+document.getElementById('info-panel').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    const item = e.target.closest('.conn-item');
+    if (item) { e.preventDefault(); item.click(); }
+  }
+});
 
 const hasWebGL = detectWebGL();
 
@@ -787,7 +830,7 @@ function showPanel(civ) {
         const other = c.from === civ.id ? c.to : c.from;
         const otherCiv = CIVILIZATIONS.find(cv => cv.id === other);
         const direction = c.from === civ.id ? '→' : '←';
-        return `<div class="conn-item" onclick="window._selectCiv('${other}')">`
+        return `<div class="conn-item" tabindex="0" onclick="window._selectCiv('${other}')">`
           + `<span class="conn-arrow">${direction}</span> ${otherCiv ? otherCiv.name : other} — <em>${c.label}</em></div>`;
       }).join('');
   } else {
