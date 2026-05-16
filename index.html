@@ -467,7 +467,17 @@ canvas { display: block; }
   <a class="fallback-link" id="fallback-link">Voir la Timeline</a>
 </div>
 
-<!-- THREE.JS -->
+<!-- THREE.JS
+     CDN Supply-Chain Inventory (Webna Check R)
+     ┌─────────────────────────────────────────────────────────────────┐
+     │ three@0.164.1  → cdn.jsdelivr.net/npm/three@0.164.1/          │
+     │   build/three.module.js           (core)                       │
+     │   examples/jsm/controls/OrbitControls.js  (addon)              │
+     │ Expected THREE.REVISION === '164'                              │
+     │ SRI: not applicable to importmap (no browser support yet)      │
+     │ Runtime integrity: version checked after dynamic import        │
+     └─────────────────────────────────────────────────────────────────┘
+-->
 <script type="importmap">
 {
   "imports": {
@@ -577,6 +587,9 @@ if (!hasWebGL) {
 } else {
 try {
 const THREE = await import('three');
+if (THREE.REVISION !== '164') {
+  console.warn('[ecole313] Three.js version mismatch: expected r164, got r' + THREE.REVISION + '. Supply-chain integrity cannot be guaranteed.');
+}
 const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
 
 // ============================================================

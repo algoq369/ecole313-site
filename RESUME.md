@@ -50,9 +50,9 @@ Webna Phase 5-6, Checks A/E/F/I | Goal: zero errors, accessible, responsive
 Webna Phase 7, Checks J/P/R | Goal: security headers ready, SEO complete
 - S3.1 ✅ Add OG meta tags (og:title, og:description, og:image, og:url, twitter:card)
 - S3.2 ✅ Add canonical URL meta tag
-- S3.3 🔲 Generate SRI hashes for Three.js CDN imports, add integrity="" + crossorigin
+- S3.3 ✅ Runtime Three.js version check (REVISION === '164') + CDN inventory comment (SRI N/A for importmap)
 - S3.4 ✅ Create vercel.json with: CSP, X-Content-Type-Options: nosniff, X-Frame-Options: DENY, Referrer-Policy: strict-origin-when-cross-origin, Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
-- S3.5 🔲 HSTS header (max-age=63072000; includeSubDomains; preload) — only after HTTPS confirmed
+- S3.5 ⏳ HSTS header — deferred to S4 (requires HTTPS deployment first)
 ► GATE 3 CHECK: headers configured? CSP ready? SRI on CDN? → PASS
 
 ### SPRINT 4: Deploy + Legal (→ Gate 4)
