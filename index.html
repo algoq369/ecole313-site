@@ -113,6 +113,7 @@ canvas { display: block; }
   transition: all 0.4s ease;
   pointer-events: none;
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 #info-panel.visible {
   opacity: 1; transform: translateX(0);
@@ -302,6 +303,25 @@ canvas { display: block; }
   .tl-container { padding-left: 80px; }
   .tl-line { left: 60px; }
   .tl-entry .tl-date { left: -80px; width: 60px; font-size: 0.6rem; }
+}
+
+@media (max-width: 480px) {
+  /* Bottom sheet info panel */
+  #info-panel {
+    top: auto; right: 0; left: 0; bottom: 0;
+    width: 100%; max-height: 50vh;
+    border-radius: 12px 12px 0 0;
+    overscroll-behavior: contain;
+  }
+  #info-panel.visible {
+    transform: translateY(0);
+  }
+
+  /* Touch targets ≥ 44px */
+  .view-toggle button { min-height: 44px; }
+  #info-panel .close-btn { min-width: 44px; min-height: 44px; }
+  .tl-entry { min-height: 44px; }
+  #info-panel .conn-item { min-height: 44px; padding: 8px 0; }
 }
 
 /* scrollbar */
