@@ -43,8 +43,8 @@ Webna Phase 5-6, Checks A/E/F/I | Goal: zero errors, accessible, responsive
 - S2.3 ✅ Focus states: :focus-visible with --accent outline on all buttons, slider, entries
 - S2.4 ✅ Responsive: info panel → bottom sheet on <480px (width:100%, max-height:50vh). Touch targets ≥44px
 - S2.5 ✅ Safari fix: add -webkit-backdrop-filter alongside backdrop-filter
-- S2.6 🔲 Test at 375/768/1024/1440px — no horizontal scroll
-► GATE 2 CHECK: zero errors? responsive? graceful failures? → PASS
+- S2.6 ✅ Test at 375/768/1024/1440px — no horizontal scroll
+► GATE 2 CHECK: zero errors? responsive? graceful failures? → PASS (18/18)
 
 ### SPRINT 3: Security + SEO (→ Gate 3)
 Webna Phase 7, Checks J/P/R | Goal: security headers ready, SEO complete
