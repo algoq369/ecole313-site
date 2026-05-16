@@ -642,10 +642,10 @@ controls.target.set(0, 0, 0);
 // ============================================================
 // LIGHTING
 // ============================================================
-const ambientLight = new THREE.AmbientLight(0x1a1a2e, 0.5);
+const ambientLight = new THREE.AmbientLight(0x1a1a2e, 0.7);
 scene.add(ambientLight);
 
-const pointLight = new THREE.PointLight(0xd4a574, 1.2, 80);
+const pointLight = new THREE.PointLight(0xd4a574, 1.8, 100);
 pointLight.position.set(0, 15, 0);
 scene.add(pointLight);
 
@@ -659,8 +659,8 @@ scene.add(rimLight);
 // Main disc
 const discGeometry = new THREE.CylinderGeometry(30, 30, 0.15, 128);
 const discMaterial = new THREE.MeshPhongMaterial({
-  color: 0x0e0e1a,
-  emissive: 0x050510,
+  color: 0x1a1a2e,
+  emissive: 0x0d0d1e,
   transparent: true,
   opacity: 0.85,
   shininess: 30,
@@ -670,7 +670,7 @@ disc.position.y = -0.5;
 scene.add(disc);
 
 // Ring markers for time periods
-const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xd4a574, transparent: true, opacity: 0.08 });
+const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xd4a574, transparent: true, opacity: 0.20 });
 [5, 10, 15, 20, 25, 30].forEach(r => {
   const ring = new THREE.Mesh(new THREE.RingGeometry(r - 0.02, r + 0.02, 128), ringMaterial);
   ring.rotation.x = -Math.PI / 2;
@@ -679,7 +679,7 @@ const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xd4a574, transparent:
 });
 
 // Region divider lines
-const regionLineMat = new THREE.LineBasicMaterial({ color: 0xd4a574, transparent: true, opacity: 0.06 });
+const regionLineMat = new THREE.LineBasicMaterial({ color: 0xd4a574, transparent: true, opacity: 0.15 });
 Object.values(REGIONS).forEach(reg => {
   const angle = (reg.angle * Math.PI) / 180;
   const points = [new THREE.Vector3(0, -0.3, 0), new THREE.Vector3(Math.cos(angle) * 30, -0.3, Math.sin(angle) * 30)];
@@ -702,7 +702,7 @@ for (let i = 0; i < starCount; i++) {
   starPos[i*3 + 2] = r * Math.cos(phi);
 }
 starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.6 });
+const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.2, transparent: true, opacity: 0.7 });
 scene.add(new THREE.Points(starGeo, starMat));
 
 // ============================================================
@@ -764,7 +764,7 @@ CIVILIZATIONS.forEach(civ => {
     new THREE.Vector3(pos.x, -0.4, pos.z),
     new THREE.Vector3(pos.x, 0.3, pos.z),
   ]);
-  const pillarMat = new THREE.LineBasicMaterial({ color: typeInfo.color, transparent: true, opacity: 0.3 });
+  const pillarMat = new THREE.LineBasicMaterial({ color: typeInfo.color, transparent: true, opacity: 0.5 });
   markerGroup.add(new THREE.Line(pillarGeo, pillarMat));
 
   markers.push({ sphere, civ, pos });
@@ -803,7 +803,7 @@ CONNECTIONS.forEach(conn => {
   const mat = new THREE.LineBasicMaterial({
     color: TYPES[fromCiv.type].color,
     transparent: true,
-    opacity: 0.12,
+    opacity: 0.25,
   });
   const line = new THREE.Line(geo, mat);
   line.userData = { conn, fromCiv, toCiv };
@@ -847,9 +847,9 @@ function highlightMarker(sphere) {
   connectionGroup.children.forEach(line => {
     const conn = line.userData.conn;
     if (conn && (conn.from === sphere.userData.civ.id || conn.to === sphere.userData.civ.id)) {
-      line.material.opacity = 0.6;
+      line.material.opacity = 0.8;
     } else if (conn) {
-      line.material.opacity = 0.05;
+      line.material.opacity = 0.08;
     }
   });
 }
@@ -858,7 +858,7 @@ function resetHighlights() {
   if (selectedMarker) selectedMarker.scale.set(1, 1, 1);
   selectedMarker = null;
   connectionGroup.children.forEach(line => {
-    if (line.material) line.material.opacity = 0.12;
+    if (line.material) line.material.opacity = 0.25;
   });
 }
 
