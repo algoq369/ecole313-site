@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0a0a12">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
 <title>AKH 313 — Carte Cosmique des Traditions Sacrées</title>
 <meta name="description" content="Visualisation 3D interactive des traditions sacrées à travers l'espace et le temps. 48 livres, 24 écoles de pensée — de Göbekli Tepe (9600 AEC) au présent.">
 <!-- Open Graph -->
@@ -341,6 +342,16 @@ canvas { display: block; }
   /* Larger slider thumb for touch */
   #time-slider::-webkit-slider-thumb { width: 20px; height: 20px; }
   #time-slider::-moz-range-thumb { width: 20px; height: 20px; }
+
+  /* Drag handle on bottom sheet */
+  #info-panel::before {
+    content: '';
+    display: block;
+    width: 40px; height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    margin: 0 auto 12px;
+  }
 }
 
 @media (max-height: 700px) {
@@ -872,7 +883,7 @@ function showPanel(civ) {
   const booksDiv = document.getElementById('panel-books');
   if (civ.books && civ.books.length > 0) {
     booksDiv.innerHTML = '<div class="books-title">Livres du curriculum</div>' +
-      civ.books.map(b => `<div class="book">📖 ${b}</div>`).join('');
+      civ.books.map(b => `<div class="book">◆ ${b}</div>`).join('');
   } else {
     booksDiv.innerHTML = '';
   }
@@ -1012,13 +1023,15 @@ window.addEventListener('resize', () => {
 // ============================================================
 // INIT
 // ============================================================
-setTimeout(() => {
-  document.getElementById('loading').classList.add('hidden');
-  document.getElementById('legend').style.display = '';
-  setTimeout(() => document.getElementById('loading').remove(), 600);
-}, 1200);
-
 animate();
+
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('legend').style.display = '';
+    setTimeout(() => { const ld = document.getElementById('loading'); if (ld) ld.remove(); }, 600);
+  });
+});
 
 } catch (e) {
   activateTimeline();
