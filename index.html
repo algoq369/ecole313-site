@@ -318,12 +318,13 @@ canvas { display: block; }
 }
 
 @media (max-width: 480px) {
-  /* Bottom sheet info panel */
+  /* Bottom sheet info panel — vertical slide-up */
   #info-panel {
     top: auto; right: 0; left: 0; bottom: 0;
     width: 100%; max-height: 50vh;
     border-radius: 12px 12px 0 0;
     overscroll-behavior: contain;
+    transform: translateY(100%);
   }
   #info-panel.visible {
     transform: translateY(0);
@@ -334,6 +335,14 @@ canvas { display: block; }
   #info-panel .close-btn { min-width: 44px; min-height: 44px; }
   .tl-entry { min-height: 44px; }
   #info-panel .conn-item { min-height: 44px; padding: 8px 0; }
+
+  /* Larger slider thumb for touch */
+  #time-slider::-webkit-slider-thumb { width: 20px; height: 20px; }
+  #time-slider::-moz-range-thumb { width: 20px; height: 20px; }
+}
+
+@media (max-height: 700px) {
+  #legend { display: none; }
 }
 
 /* scrollbar */
